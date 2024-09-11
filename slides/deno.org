@@ -1,0 +1,107 @@
+#+TITLE: DENO not just runtime
+#+AUTHOR: Ivan Zvonimir Horvat
+#+DATE: <2024-09-05>
+
+
+* Disclaimer
+#+CAPTION: Not stable yet
+#+NAME: In 2026 we will all use Deno
+[[./Parental_Advisory.png]]
+* Short History
+** 1995. Brendan Eich wrote Javascript in seven days
+** 2009. Ryan Dahl Presented Node.js in Berlin JSConf
+*** Google V8 engine (Lars Bak from Århus was lead developer)
+*** Event loop
+*** Low level I/O
+** 2010. Node Package Manager
+** 2012. Microsoft announces TypeScript
+** 2015. Mozilla Foundation releases MVP Rust
+** 2017. WebAssembly was released by W3C
+** 2018. Ryan Dahl Presented Deno in Berlin JSConf
+** 1st March 2024; JSR, JavaScript Registry, superset of NPM was released
+** 22nd August 2024; Deno released v1.46.0 last version before 2.0
+* What is Deno
+** JavaScript, TypeScript and WebAssembly sandboxed runtime with batteries, and zero configuration 
+** Built on top of V8, TokIO (Rust asynchronus runtime)
+* What it can do
+** It can run only ESM, doesn't support CommonJS
+** ...but it has support for nodejs libraries in CommonJS
+** Has URL support for importing modules and libraries from jsr, npm and https
+
+#+BEGIN_SRC typescript
+import { camelCase } from "jsr:@luca/cases@1.0.0";
+import { say } from "npm:cowsay@1.6.0";
+import { pascalCase } from "https://deno.land/x/case/mod.ts";
+#+END_SRC
+
+** Can run scripts directly from internet
+
+#+BEGIN_SRC bash
+  deno run --allow-read=. --allow-net --allow-sys jsr:@std/http@1.0.0-rc.5/file-server -p 3000
+#+END_SRC
+
+** Has integration with package.json (private repositories support is still flacky)
+** Deno commands
+| Command  | Description                                     |
+|----------+-------------------------------------------------|
+| run      | Executes JS/TS program                          |
+| serve    | Spins a server                                  |
+| bench    | Run Benchmarks                                  |
+| test     | Run Tests                                       |
+| compile  | Compiles script into OS/Architecture executable |
+| coverage | Print coverage reports                          |
+| doc      | Generates Documentation                         |
+| fmt      | Format source files                             |
+| lint     | Lint source files                               |
+| task     | Run a task defined in deno.json or package.json |
+** Deno std, standard library (unstable)
+*** archive
+*** datetime
+*** encoding
+*** fs
+*** log
+*** msgpack
+*** net
+*** path
+*** streams
+*** uuid
+* Deno Cron (unstable)
+** Supports out of box creating scheduled cron jobs
+#+BEGIN_SRC typescript
+  import { format } from "https://deno.land/std@0.224.0/datetime/format.ts";
+  Deno.cron("Run every minute", "*/1 * * * *", () => {
+      const date = new Date();
+      console.log(format(date, "MM-dd-yyyy HH:mm:ss.SSS"));
+  });
+#+END_SRC
+
+
+* Deno KV, Global Database (unstable)
+** Key Value database and queue
+** Local storage in SQLite
+** Server storage in Foundation DB
+** Key Part Ordering
+*** Uint8Array
+*** string
+*** number
+*** bigint
+*** boolean
+** Operations
+*** get
+*** list
+*** set
+*** delete
+*** sum
+*** min
+*** max
+*** watch
+
+* Resources
+** [[https://jsr.io/][JSR superset of NPM]]
+** [[https://deno.com/][Deno]]
+** [[https://deno.com/kv][Deno KV]]
+** [[https://superfromnd.gitlab.io/parental/][Parental advisory meme generator]]
+** [[https://www.rust-lang.org/][Rust language]]
+** [[https://rustwasm.github.io/book/][Webassembly in Rust]]
+** [[https://fresh.deno.dev/][Deno Fresh]]
+** [[https://github.com/silvia-odwyer/photon/][Photon Rust/WASM library]]
